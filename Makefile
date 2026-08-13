@@ -1,10 +1,16 @@
-.PHONY: start stop test lint format clean
+.PHONY: start stop logs status test lint format clean
 
 start:
-	@echo "Not implemented: start will be introduced by a future sprint."
+	docker compose up --build --detach
 
 stop:
-	@echo "Not implemented: stop will be introduced by a future sprint."
+	docker compose down
+
+logs:
+	docker compose logs --follow jupyter
+
+status:
+	docker compose ps
 
 test:
 	@echo "Not implemented: no test suite is configured yet." >&2

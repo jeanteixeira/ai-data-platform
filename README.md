@@ -4,7 +4,7 @@ Data Platform AI is an open source platform for developing, publishing, orchestr
 
 The platform is being built incrementally. Each Sprint must deliver a small, understandable capability without anticipating infrastructure or abstractions that have not yet proved necessary.
 
-> **Project status:** foundation phase. No application or infrastructure is implemented yet.
+> **Project status:** Sprint 1A provides a local JupyterLab development environment. The remaining MVP workflow is not implemented yet.
 
 ## Vision
 
@@ -93,16 +93,35 @@ Application and infrastructure directories will be introduced only by the Sprint
 
 ## Development
 
-The repository does not contain runnable application code yet. Make targets exist only as placeholders for the future developer interface:
+### Prerequisites
+
+- Git
+- Docker with Docker Compose
+
+### Start JupyterLab
+
+Clone the repository, enter its directory, and start the Local Runtime:
 
 ```bash
+git clone https://github.com/jeanteixeira/ai-data-platform.git
+cd ai-data-platform
 make start
-make stop
-make test
-make lint
-make format
-make clean
 ```
+
+Open [http://localhost:8888](http://localhost:8888) in a browser. No token is required because JupyterLab is exposed only on the local loopback interface.
+
+The local [`notebooks`](notebooks) directory is mounted at `/home/jovyan/work` in the container. Notebooks created or changed in JupyterLab therefore persist after the container is stopped or replaced. A small pandas example is available at [`notebooks/examples/pandas-transformation.ipynb`](notebooks/examples/pandas-transformation.ipynb).
+
+### Runtime commands
+
+```bash
+make start   # Build and start JupyterLab
+make stop    # Stop and remove the local containers
+make logs    # Follow JupyterLab logs
+make status  # Show the current container status
+```
+
+The remaining Make targets are reserved for later Sprints and clearly report when their functionality is not implemented.
 
 See [AGENTS.md](AGENTS.md) before contributing with an AI Coding Agent.
 Human contributors should also read [CONTRIBUTING.md](CONTRIBUTING.md).

@@ -50,16 +50,16 @@ The planned MVP is single-user, local, and development-oriented. It does not pro
 
 The Publisher writes a job candidate to the local publication area so it can be validated and reviewed. In the MVP, "publish" never means deploying directly to a production environment.
 
-### Current Sprint 0 scope
+### Current Sprint 1A scope
 
-Only repository foundation is in scope:
+Only the local JupyterLab environment is in scope:
 
-- project and agent documentation;
-- initial architecture and roadmap documentation;
-- ADR guidance;
-- project metadata and future command placeholders.
+- one JupyterLab service managed by Docker Compose;
+- a persistent local notebook workspace;
+- one small pandas example notebook;
+- minimal Make commands and startup documentation.
 
-There is no application code, service, container, or runnable infrastructure in Sprint 0.
+Airflow, PostgreSQL, Streamlit, AI, Spark, Kubernetes, Kubeflow, and application code remain outside Sprint 1A.
 
 ## Technologies
 
@@ -67,14 +67,14 @@ There is no application code, service, container, or runnable infrastructure in 
 
 - Markdown documentation;
 - TOML project metadata;
-- Make as a future command interface;
+- Make as the local command interface;
+- Docker and Docker Compose;
+- JupyterLab and pandas;
 - Git and the MIT License.
 
 ### Planned for the MVP
 
-- Python;
-- Docker and Docker Compose;
-- JupyterLab;
+- Python application code;
 - Apache Airflow and `DockerOperator`;
 - PostgreSQL for Airflow metadata;
 - a local AI provider, initially expected to be Ollama.
