@@ -50,16 +50,18 @@ The planned MVP is single-user, local, and development-oriented. It does not pro
 
 The Publisher writes a job candidate to the local publication area so it can be validated and reviewed. In the MVP, "publish" never means deploying directly to a production environment.
 
-### Current Sprint 1A scope
+### Current Sprint 1B scope
 
-Only the local JupyterLab environment is in scope:
+Only local Airflow orchestration is added to the existing JupyterLab environment:
 
-- one JupyterLab service managed by Docker Compose;
-- a persistent local notebook workspace;
-- one small pandas example notebook;
-- minimal Make commands and startup documentation.
+- PostgreSQL as the Airflow metadata database;
+- Airflow API server, scheduler, and DAG processor;
+- `LocalExecutor` with bounded parallelism;
+- persistent Airflow metadata and logs;
+- one orchestration-only health DAG;
+- integrated Make commands and access documentation.
 
-Airflow, PostgreSQL, Streamlit, AI, Spark, Kubernetes, Kubeflow, and application code remain outside Sprint 1A.
+DockerOperator jobs, production Python jobs, the Publisher, Platform AI, Streamlit, LLM integration, Spark, Kubernetes, Kubeflow, MLflow, and business logic remain outside Sprint 1B.
 
 ## Technologies
 
@@ -70,13 +72,14 @@ Airflow, PostgreSQL, Streamlit, AI, Spark, Kubernetes, Kubeflow, and application
 - Make as the local command interface;
 - Docker and Docker Compose;
 - JupyterLab and pandas;
+- Apache Airflow with `LocalExecutor`;
+- PostgreSQL for Airflow metadata;
 - Git and the MIT License.
 
 ### Planned for the MVP
 
 - Python application code;
-- Apache Airflow and `DockerOperator`;
-- PostgreSQL for Airflow metadata;
+- Airflow `DockerOperator` and production job execution;
 - a local AI provider, initially expected to be Ollama.
 
 ### Future, not current scope

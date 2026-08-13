@@ -7,10 +7,10 @@ stop:
 	docker compose down
 
 logs:
-	docker compose logs --follow jupyter
+	docker compose logs --follow
 
 status:
-	docker compose ps
+	docker compose ps --all
 
 test:
 	@echo "Not implemented: no test suite is configured yet." >&2

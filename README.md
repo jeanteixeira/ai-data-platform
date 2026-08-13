@@ -4,7 +4,7 @@ Data Platform AI is an open source platform for developing, publishing, orchestr
 
 The platform is being built incrementally. Each Sprint must deliver a small, understandable capability without anticipating infrastructure or abstractions that have not yet proved necessary.
 
-> **Project status:** Sprint 1A provides a local JupyterLab development environment. The remaining MVP workflow is not implemented yet.
+> **Project status:** Sprint 1B provides local JupyterLab development and Apache Airflow orchestration environments. The remaining MVP workflow is not implemented yet.
 
 ## Vision
 
@@ -98,7 +98,7 @@ Application and infrastructure directories will be introduced only by the Sprint
 - Git
 - Docker with Docker Compose
 
-### Start JupyterLab
+### Start the Local Runtime
 
 Clone the repository, enter its directory, and start the Local Runtime:
 
@@ -108,17 +108,26 @@ cd ai-data-platform
 make start
 ```
 
-Open [http://localhost:8888](http://localhost:8888) in a browser. No token is required because JupyterLab is exposed only on the local loopback interface.
+After all services become healthy, open:
+
+- JupyterLab: [http://localhost:8888](http://localhost:8888)
+- Apache Airflow: [http://localhost:8080](http://localhost:8080)
+
+No credentials are required. Both interfaces are exposed only on the local loopback interface, and their authentication is disabled strictly for this local development environment.
 
 The local [`notebooks`](notebooks) directory is mounted at `/home/jovyan/work` in the container. Notebooks created or changed in JupyterLab therefore persist after the container is stopped or replaced. A small pandas example is available at [`notebooks/examples/pandas-transformation.ipynb`](notebooks/examples/pandas-transformation.ipynb).
+
+Airflow uses PostgreSQL for metadata, stores metadata and logs in persistent Docker volumes, and discovers DAGs from [`airflow/dags`](airflow/dags). Sprint 1B includes only the manually triggered `platform_health_check` DAG. It validates DAG discovery, scheduling, and task execution without containing business logic.
+
+The local Airflow deployment uses `LocalExecutor` with parallelism limited to four processes. It does not include Celery, Redis, workers, or production job execution.
 
 ### Runtime commands
 
 ```bash
-make start   # Build and start JupyterLab
-make stop    # Stop and remove the local containers
-make logs    # Follow JupyterLab logs
-make status  # Show the current container status
+make start   # Build and start JupyterLab, PostgreSQL, and Airflow
+make stop    # Stop and remove local containers while preserving data volumes
+make logs    # Follow logs from all local services
+make status  # Show all service states, including Airflow initialization
 ```
 
 The remaining Make targets are reserved for later Sprints and clearly report when their functionality is not implemented.
