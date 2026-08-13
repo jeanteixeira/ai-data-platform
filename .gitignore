@@ -157,6 +157,26 @@ ENV/
 env.bak/
 venv.bak/
 
+# Local environment overrides (keep .env.example versioned)
+.env.*
+!.env.example
+
+# Operating systems
+.DS_Store
+Thumbs.db
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local platform runtime data
+data/input/*
+data/output/*
+!data/input/.gitkeep
+!data/output/.gitkeep
+
 # Spyder project settings
 .spyderproject
 .spyproject

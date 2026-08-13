@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "data-platform-ai"
+version = "0.0.0"
+description = "Open source platform for developing, publishing, orchestrating, and running data and AI workloads."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Jean Barros Teixeira" },
+]
+keywords = ["data-engineering", "airflow", "notebooks", "artificial-intelligence"]
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/jeanteixeira/ai-data-platform"
+Issues = "https://github.com/jeanteixeira/ai-data-platform/issues"

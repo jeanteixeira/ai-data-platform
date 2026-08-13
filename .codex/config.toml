@@ -1,0 +1,3 @@
+[agents.architecture_reviewer]
+description = "Tech Lead and Software Architect who reviews the current Sprint without modifying the repository."
+config_file = "agents/architecture_reviewer.toml"
