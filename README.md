@@ -4,7 +4,7 @@ Data Platform AI is an open source platform for developing, publishing, orchestr
 
 The platform is being built incrementally. Each Sprint must deliver a small, understandable capability without anticipating infrastructure or abstractions that have not yet proved necessary.
 
-> **Project status:** Sprint 3 provides a minimal Platform CLI alongside local JupyterLab development, Apache Airflow orchestration, and one independently containerized Python job. Notebook publishing and AI assistance are not implemented yet.
+> **Project status:** Sprint 4 provides deterministic notebook publishing alongside the local Platform CLI and Runtime. AI assistance is not implemented yet.
 
 ## Vision
 
@@ -156,9 +156,38 @@ The initial commands are:
 dataplatform doctor
 dataplatform jobs list
 dataplatform jobs run hello_world
+dataplatform publish notebooks/examples/pandas-transformation.ipynb
 ```
 
 `doctor` checks Docker, Docker Compose, JupyterLab, Airflow, the Airflow metadata database, and the scheduler. `jobs run` asks Airflow to trigger the existing DAG; it does not execute job code itself. Use the Airflow UI to follow the triggered run and inspect its task logs.
+
+### Publish a notebook deterministically
+
+Publishing reads supported Python code cells and creates a reviewable job candidate under `jobs/generated/<job_name>/`:
+
+```bash
+dataplatform publish notebooks/examples/pandas-transformation.ipynb
+
+dataplatform publish notebooks/examples/pandas-transformation.ipynb \
+  --name daily_sales \
+  --schedule "0 12 * * *"
+```
+
+The generated candidate contains `job.yaml`, `src/main.py`, `requirements.txt`, `Dockerfile`, and a review guide. The command does not register a job, generate an Airflow DAG, build an image, deploy, schedule, or execute anything. If the destination already exists, publishing fails unless `--force` is explicitly supplied.
+
+The deterministic Publisher currently supports sequential, syntactically valid Python code cells. Markdown and saved cell outputs are ignored. IPython magics, shell commands, help syntax, `get_ipython()` calls, non-Python notebooks, and hidden notebook state are unsupported. Code is preserved without semantic refactoring, so reviewers must verify execution order, side effects, paths, and runtime assumptions.
+
+Dependencies are never inferred. A notebook may declare exact versions in metadata:
+
+```json
+{
+  "dataplatform": {
+    "requirements": ["pandas==2.3.3"]
+  }
+}
+```
+
+Only requirements pinned with `==` are accepted. After publication, review the generated source, Job Specification, dependencies, and container definition before manually validating or promoting the candidate.
 
 ### Runtime commands
 

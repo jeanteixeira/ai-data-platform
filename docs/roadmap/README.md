@@ -36,7 +36,7 @@ Connect notebook development to job publication without relying on model inferen
 - notebook parsing;
 - minimal versioned Job Specification (`JobSpec`);
 - Publisher command-line interface;
-- deterministic or fake `AIProvider` for testing;
+- deterministic publishing without model inference;
 - generated job structure;
 - validation and atomic publication;
 - automated end-to-end test.

@@ -20,7 +20,10 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
-dependencies = []
+dependencies = [
+  "nbformat>=5.10,<6",
+  "PyYAML>=6,<7",
+]
 
 [project.scripts]
 dataplatform = "dataplatform.cli:main"

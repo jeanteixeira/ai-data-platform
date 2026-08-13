@@ -43,7 +43,7 @@ Provides the local notebook development environment. It is not a production job 
 
 ### Publisher
 
-A small command-line workflow that reads a notebook, asks an `AIProvider` to propose a job, validates the result, and writes a reviewable job candidate to the local publication area. Publishing makes the candidate available for validation and human review; it does not deploy the job directly to a production environment. The Publisher will not initially be a long-running service or maintain its own database.
+A small command-line workflow that reads a notebook, validates it, and writes a reviewable job candidate to the local publication area. Its first implementation deterministically preserves supported Python cells using controlled templates and explicit dependency metadata. A later Sprint may ask an `AIProvider` to propose semantic changes without bypassing validation or review. Publishing makes the candidate available for validation and human review; it does not register, schedule, build, deploy, or execute the job. The Publisher is not a long-running service and maintains no database.
 
 ### AIProvider
 
@@ -53,7 +53,7 @@ AI-generated code is considered untrusted until reviewed and validated.
 
 ### Job Specification
 
-The Job Specification (`JobSpec`) is a small, versioned description of a job containing only fields required by the MVP, such as its name, entrypoint, and image. It must not anticipate Spark or Kubernetes fields before those runtime capabilities exist.
+The Job Specification (`JobSpec`) is a small, versioned description of a Python job candidate. Its first version contains only the job name, runtime, Python version, entrypoint, and an optional schedule. It must not anticipate Spark, Kubernetes, ML, agent, or resource fields before those capabilities have concrete requirements.
 
 ### Apache Airflow
 

@@ -50,16 +50,18 @@ The planned MVP is single-user, local, and development-oriented. It does not pro
 
 The Publisher writes a job candidate to the local publication area so it can be validated and reviewed. In the MVP, "publish" never means deploying directly to a production environment.
 
-### Current Sprint 3 scope
+### Current Sprint 4 scope
 
-The first Platform CLI is added on top of the existing Local Runtime:
+The first deterministic Publisher is added to the Platform CLI:
 
-- `dataplatform doctor` checks local dependencies and service health;
-- `dataplatform jobs list` reports the manually supported jobs;
-- `dataplatform jobs run hello_world` delegates execution to Airflow;
-- focused command-line tests use the Python standard library.
+- `dataplatform publish <notebook>` reads supported Python code cells;
+- a minimal versioned Python Job Specification describes each candidate;
+- controlled templates create source, dependency, container, and review artifacts;
+- dependencies come only from explicitly pinned notebook metadata;
+- validation occurs before a candidate is materialized;
+- an existing candidate is protected unless `--force` is supplied.
 
-The CLI is not an orchestration engine and contains no job transformation logic. The Publisher, Platform AI, Job Specification automation, Streamlit, LLM integration, Spark, Kubernetes, Kubeflow, MLflow, and additional business logic remain outside Sprint 3.
+Publishing produces a candidate for human review. It does not register, schedule, build, deploy, or execute the candidate. AIProvider, LLM integration, semantic refactoring, automatic DAG generation, automatic registration, Streamlit, Spark, Kubernetes, Kubeflow, and MLflow remain outside Sprint 4.
 
 ## Technologies
 
@@ -74,6 +76,8 @@ The CLI is not an orchestration engine and contains no job transformation logic.
 - PostgreSQL for Airflow metadata;
 - one isolated Python and pandas job container;
 - a minimal Python CLI using `argparse`;
+- deterministic notebook parsing with `nbformat`;
+- YAML serialization for the minimal Job Specification;
 - Git and the MIT License.
 
 ### Planned for the MVP

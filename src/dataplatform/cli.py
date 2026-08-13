@@ -8,9 +8,12 @@ import shutil
 import subprocess
 import sys
 from collections.abc import Sequence
+from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
+
+from dataplatform.publisher import PublisherError, publish_notebook
 
 
 JUPYTER_HEALTH_URL = "http://localhost:8888/api"
@@ -139,6 +142,20 @@ def run_job(job_name: str) -> int:
     return 0
 
 
+def publish(notebook: str, name: str | None, schedule: str | None, force: bool) -> int:
+    """Generate a reviewable job candidate from a supported notebook."""
+    try:
+        destination = publish_notebook(
+            Path(notebook), name=name, schedule=schedule, force=force
+        )
+    except PublisherError as error:
+        print(f"Publishing failed: {error}", file=sys.stderr)
+        return 1
+    print(f"Created reviewable job candidate at {destination}")
+    print("Review and validate the candidate before promotion.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="dataplatform",
@@ -146,6 +163,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("doctor", help="Check local Platform dependencies")
+
+    publish_parser = subparsers.add_parser(
+        "publish", help="Generate a reviewable job candidate from a notebook"
+    )
+    publish_parser.add_argument("notebook")
+    publish_parser.add_argument("--name")
+    publish_parser.add_argument("--schedule")
+    publish_parser.add_argument(
+        "--force", action="store_true", help="Replace an existing candidate"
+    )
 
     jobs_parser = subparsers.add_parser("jobs", help="Inspect and run jobs")
     jobs_subparsers = jobs_parser.add_subparsers(dest="jobs_command", required=True)
@@ -159,6 +186,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "doctor":
         return doctor()
+    if args.command == "publish":
+        return publish(args.notebook, args.name, args.schedule, args.force)
     if args.jobs_command == "list":
         return list_jobs()
     return run_job(args.job_name)
