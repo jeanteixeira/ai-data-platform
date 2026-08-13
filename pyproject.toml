@@ -22,6 +22,12 @@ classifiers = [
 ]
 dependencies = []
 
+[project.scripts]
+dataplatform = "dataplatform.cli:main"
+
 [project.urls]
 Repository = "https://github.com/jeanteixeira/ai-data-platform"
 Issues = "https://github.com/jeanteixeira/ai-data-platform/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dataplatform"]

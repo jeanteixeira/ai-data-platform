@@ -33,6 +33,10 @@ The promotion boundary between notebook and job is central. A notebook supports 
 
 ## MVP components
 
+### Platform CLI
+
+Provides a thin local entry point for environment diagnostics, job discovery, and developer actions. It delegates orchestration to Airflow and execution to Docker; it must not contain job business logic or evolve into a separate orchestration engine.
+
 ### JupyterLab
 
 Provides the local notebook development environment. It is not a production job runtime.

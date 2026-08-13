@@ -4,7 +4,7 @@ Data Platform AI is an open source platform for developing, publishing, orchestr
 
 The platform is being built incrementally. Each Sprint must deliver a small, understandable capability without anticipating infrastructure or abstractions that have not yet proved necessary.
 
-> **Project status:** Sprint 2 provides local JupyterLab development, Apache Airflow orchestration, and one independently containerized Python job. Notebook publishing and AI assistance are not implemented yet.
+> **Project status:** Sprint 3 provides a minimal Platform CLI alongside local JupyterLab development, Apache Airflow orchestration, and one independently containerized Python job. Notebook publishing and AI assistance are not implemented yet.
 
 ## Vision
 
@@ -140,6 +140,26 @@ Alternatively, open Airflow, select `hello_world_python_job`, and use **Trigger*
 
 > **Local security limitation:** `airflow-scheduler` mounts the host Docker socket so `DockerOperator` can create the isolated job container. Access to this socket is effectively host-level control and is acceptable only for this single-user local POC. Do not expose this deployment to untrusted users. The job container itself does not receive the socket and runs without a network when launched by the DAG.
 
+### Platform CLI
+
+From the repository root, create an isolated Python environment and install the CLI in editable mode:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --editable .
+```
+
+The initial commands are:
+
+```bash
+dataplatform doctor
+dataplatform jobs list
+dataplatform jobs run hello_world
+```
+
+`doctor` checks Docker, Docker Compose, JupyterLab, Airflow, the Airflow metadata database, and the scheduler. `jobs run` asks Airflow to trigger the existing DAG; it does not execute job code itself. Use the Airflow UI to follow the triggered run and inspect its task logs.
+
 ### Runtime commands
 
 ```bash
@@ -147,9 +167,10 @@ make start   # Build the runtime and job images, then start local services
 make stop    # Stop and remove local containers while preserving data volumes
 make logs    # Follow logs from all local services
 make status  # Show all service states, including Airflow initialization
+make test    # Run the focused CLI test suite
 ```
 
-The remaining Make targets are reserved for later Sprints and clearly report when their functionality is not implemented.
+The remaining placeholder Make targets clearly report when their functionality is not implemented.
 
 See [AGENTS.md](AGENTS.md) before contributing with an AI Coding Agent.
 Human contributors should also read [CONTRIBUTING.md](CONTRIBUTING.md).

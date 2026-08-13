@@ -50,17 +50,16 @@ The planned MVP is single-user, local, and development-oriented. It does not pro
 
 The Publisher writes a job candidate to the local publication area so it can be validated and reviewed. In the MVP, "publish" never means deploying directly to a production environment.
 
-### Current Sprint 2 scope
+### Current Sprint 3 scope
 
-The first manually authored Python job is added to the Local Runtime:
+The first Platform CLI is added on top of the existing Local Runtime:
 
-- an independent Python and pandas job image;
-- one orchestration-only DAG using Airflow `DockerOperator`;
-- job standard output captured in Airflow logs;
-- host Docker socket access restricted to the Airflow scheduler;
-- no Docker socket access in the job container.
+- `dataplatform doctor` checks local dependencies and service health;
+- `dataplatform jobs list` reports the manually supported jobs;
+- `dataplatform jobs run hello_world` delegates execution to Airflow;
+- focused command-line tests use the Python standard library.
 
-The Publisher, Platform AI, Job Specification automation, Streamlit, LLM integration, Spark, Kubernetes, Kubeflow, MLflow, and additional business logic remain outside Sprint 2.
+The CLI is not an orchestration engine and contains no job transformation logic. The Publisher, Platform AI, Job Specification automation, Streamlit, LLM integration, Spark, Kubernetes, Kubeflow, MLflow, and additional business logic remain outside Sprint 3.
 
 ## Technologies
 
@@ -74,6 +73,7 @@ The Publisher, Platform AI, Job Specification automation, Streamlit, LLM integra
 - Apache Airflow with `LocalExecutor` and `DockerOperator`;
 - PostgreSQL for Airflow metadata;
 - one isolated Python and pandas job container;
+- a minimal Python CLI using `argparse`;
 - Git and the MIT License.
 
 ### Planned for the MVP

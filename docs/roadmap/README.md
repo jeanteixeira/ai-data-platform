@@ -24,6 +24,7 @@ Prove that Airflow can run a manually authored Python job in a separate containe
 - one manually authored Python job;
 - Airflow `DockerOperator` execution;
 - logs visible through Airflow;
+- a minimal CLI for diagnostics, job listing, and Airflow-triggered runs;
 - local setup and teardown documentation.
 
 **Exit condition:** a contributor can start the environment and execute the example job end to end.

@@ -14,8 +14,7 @@ status:
 	docker compose ps --all
 
 test:
-	@echo "Not implemented: no test suite is configured yet." >&2
-	@exit 1
+	PYTHONPATH=src python -m unittest discover --start-directory tests --verbose
 
 lint:
 	@echo "Not implemented: lint will be introduced by a future sprint."

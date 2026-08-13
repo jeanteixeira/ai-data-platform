@@ -28,7 +28,7 @@ Thank you for your interest in contributing to Data Platform AI. The project evo
 5. Review the final diff for unrelated changes and stale documentation.
 6. Submit a clear description of the problem, approach, validation, and limitations.
 
-The Make targets are the intended contributor interface, but some remain placeholders during the foundation phase. A placeholder must not be interpreted as a completed validation.
+The Make targets are the intended contributor interface. Run `make test` for the current automated suite; targets for tooling not introduced yet remain explicit placeholders and must not be interpreted as completed validation.
 
 ## Architectural decisions
 
