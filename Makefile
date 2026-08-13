@@ -1,7 +1,8 @@
 .PHONY: start stop logs status test lint format clean
 
 start:
-	docker compose up --build --detach
+	docker compose --profile jobs build
+	docker compose up --detach
 
 stop:
 	docker compose down

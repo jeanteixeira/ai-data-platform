@@ -4,7 +4,7 @@ Data Platform AI is an open source platform for developing, publishing, orchestr
 
 The platform is being built incrementally. Each Sprint must deliver a small, understandable capability without anticipating infrastructure or abstractions that have not yet proved necessary.
 
-> **Project status:** Sprint 1B provides local JupyterLab development and Apache Airflow orchestration environments. The remaining MVP workflow is not implemented yet.
+> **Project status:** Sprint 2 provides local JupyterLab development, Apache Airflow orchestration, and one independently containerized Python job. Notebook publishing and AI assistance are not implemented yet.
 
 ## Vision
 
@@ -117,14 +117,33 @@ No credentials are required. Both interfaces are exposed only on the local loopb
 
 The local [`notebooks`](notebooks) directory is mounted at `/home/jovyan/work` in the container. Notebooks created or changed in JupyterLab therefore persist after the container is stopped or replaced. A small pandas example is available at [`notebooks/examples/pandas-transformation.ipynb`](notebooks/examples/pandas-transformation.ipynb).
 
-Airflow uses PostgreSQL for metadata, stores metadata and logs in persistent Docker volumes, and discovers DAGs from [`airflow/dags`](airflow/dags). Sprint 1B includes only the manually triggered `platform_health_check` DAG. It validates DAG discovery, scheduling, and task execution without containing business logic.
+Airflow uses PostgreSQL for metadata, stores metadata and logs in persistent Docker volumes, and discovers DAGs from [`airflow/dags`](airflow/dags). The `platform_health_check` DAG validates the orchestration services. The `hello_world_python_job` DAG uses `DockerOperator` to execute the independent example under [`jobs/hello_world`](jobs/hello_world); neither DAG contains business logic.
 
-The local Airflow deployment uses `LocalExecutor` with parallelism limited to four processes. It does not include Celery, Redis, workers, or production job execution.
+The local Airflow deployment uses `LocalExecutor` with parallelism limited to four processes. It does not include Celery, Redis, or workers.
+
+### Run the example Python job
+
+`make start` builds the example job image as part of the local setup. To build or run it independently:
+
+```bash
+docker compose build hello-world-job
+docker compose run --rm hello-world-job
+```
+
+To trigger its Airflow DAG from the command line:
+
+```bash
+docker compose exec airflow-scheduler airflow dags trigger hello_world_python_job
+```
+
+Alternatively, open Airflow, select `hello_world_python_job`, and use **Trigger**. Open the resulting DAG run, select `run_hello_world_job`, and choose **Logs** to inspect the job's standard output.
+
+> **Local security limitation:** `airflow-scheduler` mounts the host Docker socket so `DockerOperator` can create the isolated job container. Access to this socket is effectively host-level control and is acceptable only for this single-user local POC. Do not expose this deployment to untrusted users. The job container itself does not receive the socket and runs without a network when launched by the DAG.
 
 ### Runtime commands
 
 ```bash
-make start   # Build and start JupyterLab, PostgreSQL, and Airflow
+make start   # Build the runtime and job images, then start local services
 make stop    # Stop and remove local containers while preserving data volumes
 make logs    # Follow logs from all local services
 make status  # Show all service states, including Airflow initialization

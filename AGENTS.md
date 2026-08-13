@@ -50,18 +50,17 @@ The planned MVP is single-user, local, and development-oriented. It does not pro
 
 The Publisher writes a job candidate to the local publication area so it can be validated and reviewed. In the MVP, "publish" never means deploying directly to a production environment.
 
-### Current Sprint 1B scope
+### Current Sprint 2 scope
 
-Only local Airflow orchestration is added to the existing JupyterLab environment:
+The first manually authored Python job is added to the Local Runtime:
 
-- PostgreSQL as the Airflow metadata database;
-- Airflow API server, scheduler, and DAG processor;
-- `LocalExecutor` with bounded parallelism;
-- persistent Airflow metadata and logs;
-- one orchestration-only health DAG;
-- integrated Make commands and access documentation.
+- an independent Python and pandas job image;
+- one orchestration-only DAG using Airflow `DockerOperator`;
+- job standard output captured in Airflow logs;
+- host Docker socket access restricted to the Airflow scheduler;
+- no Docker socket access in the job container.
 
-DockerOperator jobs, production Python jobs, the Publisher, Platform AI, Streamlit, LLM integration, Spark, Kubernetes, Kubeflow, MLflow, and business logic remain outside Sprint 1B.
+The Publisher, Platform AI, Job Specification automation, Streamlit, LLM integration, Spark, Kubernetes, Kubeflow, MLflow, and additional business logic remain outside Sprint 2.
 
 ## Technologies
 
@@ -72,14 +71,14 @@ DockerOperator jobs, production Python jobs, the Publisher, Platform AI, Streaml
 - Make as the local command interface;
 - Docker and Docker Compose;
 - JupyterLab and pandas;
-- Apache Airflow with `LocalExecutor`;
+- Apache Airflow with `LocalExecutor` and `DockerOperator`;
 - PostgreSQL for Airflow metadata;
+- one isolated Python and pandas job container;
 - Git and the MIT License.
 
 ### Planned for the MVP
 
 - Python application code;
-- Airflow `DockerOperator` and production job execution;
 - a local AI provider, initially expected to be Ollama.
 
 ### Future, not current scope
